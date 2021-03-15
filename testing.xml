@@ -1,0 +1,12 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="www.davorminchorov.com">
+    <test name="TestingHomePage">
+        <classes>
+            <class name="Tests.BaseSet"/>
+            <class name="Tests.Homepage.TestingContactForm"/>
+            <class name="Tests.Homepage.TestingHomePageHyperlinks"/>
+            <class name="Tests.Homepage.TestingHomePageTextsAndBlogNavigation"/>
+            <class name="TestingBrokenLinks"/>
+        </classes>
+    </test>
+</suite>
