@@ -1,10 +1,5 @@
 package pages;
 
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -13,7 +8,6 @@ import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -27,7 +21,6 @@ import static factory.DriverFactory.getChromeDriver;
 public class HomePage {
 
     private WebDriver driver = getChromeDriver();
-    private WebDriverWait wait;
     private WebElement contactForm;
     private String url;
     HttpURLConnection huc;
@@ -35,24 +28,35 @@ public class HomePage {
 
     Actions actions = new Actions(driver);
 
-
+    /**
+     * Finds the blog link on the page, and asserts if the blog button is displayed.
+     *
+     * @return WebElement
+     */
     public WebElement findBlog() {
-
         WebElement blogButton = driver.findElement(By.xpath("/html/body/div/nav/a[2]"));
         Assert.assertTrue(blogButton.isDisplayed());
 
         return blogButton;
     }
 
+    /**
+     * Clicks on the blog link and goes to the blog page.
+     *
+     * @return BlogPage
+     */
     public BlogPage clickBlog() {
-
         findBlog().click();
 
         return new BlogPage();
     }
 
+    /**
+     * Validating whole homepage screen and all elements that should be displayed
+     *
+     * @return void
+     */
     public void validateScreen() {
-
         WebElement aboutMe = driver.findElement(By.xpath("/html/body/div/main/div/div/div[2]/div[1]"));
         Assert.assertTrue(aboutMe.isDisplayed());
 
@@ -83,9 +87,13 @@ public class HomePage {
 
         WebElement twitterLogo = driver.findElement(By.linkText("Twitter icon"));
         Assert.assertTrue(twitterLogo.isDisplayed());
-
     }
 
+    /**
+     * Validating About me text
+     *
+     * @return void
+     */
     public void checkAboutMe() {
         String aboutMeText = driver.findElement(By.xpath("/html/body/div/main/div/div/div[2]/div[1]")).getText();
         Assert.assertEquals(aboutMeText, "About Me\n" +
@@ -104,6 +112,11 @@ public class HomePage {
                 "Also, I was a mentor at Adeva's Female Bootcamp 2018. You can read more about the bootcamp experience here");
     }
 
+    /**
+     * Validating Technology stack text
+     *
+     * @return void
+     */
     public void checkTechnologyStackText() {
         String technologyStackText = driver.findElement(By.xpath("/html/body/div/main/div/div/div[2]/div[2]/article")).getText();
         Assert.assertEquals(technologyStackText, "Technology Stack\n" +
@@ -115,33 +128,67 @@ public class HomePage {
                 "Docker\n" + "PHPStorm\n" + "PHPUnit\n" + "Jenkins");
     }
 
+    /**
+     * Finds and asserts contact form.
+     *
+     * @return void
+     */
     public void findContactForm() {
         contactForm = driver.findElement(By.tagName("form"));
+
         Assert.assertTrue(contactForm.isDisplayed());
         Assert.assertTrue(contactForm.isEnabled());
     }
 
+    /**
+     * Sets valid full name and waits 5 seconds to avoid reCAPTCHA errors.
+     *
+     * @return void
+     * @throws InterruptedException
+     */
     public void setValidFullName() throws InterruptedException {
         driver.findElement(By.xpath("/html/body/div/main/div/div/div[3]/div/div/form/label[1]/input")).sendKeys("Miki Test");
         Thread.sleep(5000);
     }
 
-
+    /**
+     * Sets valid mail name and waits 5 seconds to avoid reCAPTCHA errors.
+     *
+     * @return void
+     * @throws InterruptedException
+     */
     public void setValidMail() throws InterruptedException {
         driver.findElement(By.name("email")).sendKeys("mikitesting@gmail.com");
         Thread.sleep(5000);
     }
 
+    /**
+     * Sets valid message name and waits 5 seconds to avoid reCAPTCHA errors.
+     *
+     * @return void
+     * @throws InterruptedException
+     */
     public void setValidMessage() throws InterruptedException {
         driver.findElement(By.name("message")).sendKeys("Hello Davor, it`s Miki testing");
         Thread.sleep(5000);
     }
 
+    /**
+     * Clicks send button of the contact form
+     *
+     * @return void
+     * @throws InterruptedException
+     */
     public void clickSendButton() throws InterruptedException {
         driver.findElement(By.xpath("/html/body/div/main/div/div/div[3]/div/div/form/button")).click();
         Thread.sleep(2000);
     }
 
+    /**
+     * Asserts successful sent message response.
+     *
+     * @return void
+     */
     public void checkSuccessfulSentMessageReport() {
         WebElement successfullySentMessage = driver.findElement(By.xpath("/html/body/div/main/div/div/div[3]/div/div/form/div[1]"));
         Assert.assertTrue(successfullySentMessage.isDisplayed());
@@ -150,8 +197,12 @@ public class HomePage {
         Assert.assertEquals(successfullySentMessage.getText(), "Thank you! Your message was sent successfully. I will respond as soon as possible.");
     }
 
+    /**
+     * Asserts any of the error sent messages response for each field on the contact form
+     *
+     * @return void
+     */
     public void checkUnsuccessfulSentMessageReport() {
-
         if (driver.findElement(By.xpath("/html/body/div/main/div/div/div[3]/div/div/form/div[1]")).isDisplayed()) {
 
             String unsuccessfullySentMessage = driver.findElement(By.xpath("/html/body/div/main/div/div/div[3]/div/div/form/div[1]")).getText();
@@ -183,8 +234,13 @@ public class HomePage {
         }
     }
 
+    /**
+     * Declaring all the WebElements that should appear when empty message is forced to send,
+     * and getting the text from them then asserts the text.
+     *
+     * @return void
+     */
     public void checkEmptyFormSendMessagesReport() {
-        //Declaring all the WebElements that should appear when empty message is forced to send, and getting the text from them
         WebElement unsuccessfullySentMessageReport = driver.findElement(By.xpath("/html/body/div/main/div/div/div[3]/div/div/form/div[1]"));
         String unsuccessfullySentMessageText = driver.findElement(By.xpath("/html/body/div/main/div/div/div[3]/div/div/form/div[1]")).getText();
 
@@ -211,13 +267,27 @@ public class HomePage {
         Assert.assertEquals(messageFieldIsRequiredMessage, "The message field is required.");
     }
 
+    /**
+     * Finds and asserts if the hyperlinks are enabled and displayed.
+     *
+     * @param WebElement find
+     * @return WebElement
+     */
     public WebElement findHyperlink(WebElement find) {
         this.find = find;
+
         Assert.assertTrue(find.isEnabled());
         Assert.assertTrue(find.isDisplayed());
+
         return find;
     }
 
+    /**
+     * Gets the color as Hex and asserts if it`s the expected color.
+     *
+     * @param String expectedColourAsHex
+     * @return void
+     */
     public void getHyperlinkColor(String expectedColourAsHex) {
         String getElementColour = findHyperlink(find).getCssValue("color");
 
@@ -225,11 +295,23 @@ public class HomePage {
         Assert.assertEquals(HexColor, expectedColourAsHex);
     }
 
+    /**
+     * Navigates to second tab.
+     *
+     * @return void
+     */
     private void navigateToSecondTab() {
         ArrayList<String> tabs = new ArrayList<String>(driver.getWindowHandles());
+
         driver.switchTo().window(tabs.get(1));
     }
 
+    /**
+     * It closes the first tab, so the script can continue with next tests searching for elements
+     * on the right page.
+     *
+     * @return void
+     */
     public void closeTab() {
         String originalHandle = driver.getWindowHandle();
 
@@ -243,6 +325,12 @@ public class HomePage {
         driver.switchTo().window(originalHandle);
     }
 
+    /**
+     * Clicks on the links and asserts URLS
+     *
+     * @param String expectedContains
+     * @return void
+     */
     public void clickAndCheckLink(String expectedContains) {
 
         String getLinkAsString = findHyperlink(find).getAttribute("href");
@@ -256,14 +344,19 @@ public class HomePage {
         closeTab();
     }
 
-    /*
-    Hover example. At this moment I don`t test the hovers over links because I don`t have the requirements.
+    /**
+     * Hover example. At this moment I don`t test the hovers over links because I don`t have the requirements.
      */
     public void hoverQuantoxHyperlink() {
         WebElement quantoxLink = driver.findElement(By.linkText("Quantox Technology"));
         actions.moveToElement(quantoxLink).perform();
     }
 
+    /**
+     * Checking for broken links on the page.
+     *
+     * @return void
+     */
     public void brokenLinksCheck() {
         List<WebElement> links = driver.findElements(By.tagName("a"));
         Iterator<WebElement> it = links.iterator();
@@ -296,31 +389,11 @@ public class HomePage {
                 }
 
             } catch (MalformedURLException e) {
-// TODO Auto-generated catch block
                 e.printStackTrace();
+
             } catch (IOException e) {
-// TODO Auto-generated catch block
                 e.printStackTrace();
             }
         }
-    }
-
-    public void validateAdevaHyperlink() throws IOException, InvalidFormatException {
-
-        String adevaURL = driver.findElement(By.linkText("Quantox Technology")).getAttribute("href");
-
-        Assert.assertEquals(adevaURL,getExcelData("Hyperlinks",2,2));
-
-    }
-
-    public String getExcelData(String sheetName , int rowNum , int colNum) throws InvalidFormatException, IOException{
-        FileInputStream fileInputStream = new FileInputStream("C:\\Users\\Administrator\\Desktop\\QA\\Automation\\Projects\\TestingD\\data\\davorminchorov_Test_Data_Hyperlinks.xlsx");
-        Workbook workbook = WorkbookFactory.create(fileInputStream);
-
-        Sheet sheet = workbook.getSheet(sheetName);
-        Row row = sheet.getRow(rowNum);
-        String data = row.getCell(colNum).getStringCellValue();
-
-        return data;
     }
 }
