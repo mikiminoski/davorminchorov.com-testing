@@ -6,7 +6,7 @@
             <class name="Tests.Homepage.TestingContactForm"/>
             <class name="Tests.Homepage.TestingHomePageHyperlinks"/>
             <class name="Tests.Homepage.TestingHomePageTextsAndBlogNavigation"/>
-            <class name="TestingBrokenLinks"/>
+            <class name="Tests.TestingBrokenLinks"/>
         </classes>
     </test>
 </suite>
