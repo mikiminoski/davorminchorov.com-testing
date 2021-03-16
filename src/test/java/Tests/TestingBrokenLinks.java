@@ -1,3 +1,4 @@
+package Tests;
 
 import Tests.BaseSet;
 import org.testng.annotations.Test;

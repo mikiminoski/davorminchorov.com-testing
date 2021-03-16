@@ -1,12 +1,13 @@
 package Tests;
 
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeSuite;
+
 import java.time.Duration;
+
 import static factory.DriverFactory.getChromeDriver;
 
 public class BaseSet {
@@ -23,7 +24,7 @@ public class BaseSet {
     public void setUp() {
         driver = getChromeDriver();
 
-        url = "http://davorminchorov.com/?ref=MikiAutomation";
+        url = "https://davorminchorov.com/?ref=MikiAutomation";
 
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
