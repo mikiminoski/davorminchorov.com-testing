@@ -5,7 +5,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.Color;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 
 import java.io.IOException;
@@ -21,23 +20,62 @@ import static factory.DriverFactory.getChromeDriver;
 public class HomePage {
 
     private WebDriver driver = getChromeDriver();
-    private WebElement contactForm;
     private String url;
     HttpURLConnection huc;
     private WebElement find;
+    private String linkText;
 
     Actions actions = new Actions(driver);
+
+    private HomePage() {
+    }
+
+    public static HomePage getHomePage() {
+        return new HomePage();
+    }
+
+    private WebElement locateAboutMe() {
+        return driver.findElement(By.xpath("/html/body/div/main/div/div/div[2]/div[1]"));
+    }
+
+    private WebElement locateTechStack() {
+        return driver.findElement(By.xpath("/html/body/div/main/div/div/div[2]/div[2]"));
+    }
+
+    private WebElement locateContactForm() {
+        return driver.findElement(By.xpath("/html/body/div/main/div/div/div[3]/div/div/form"));
+    }
+
+    private WebElement locateBlogButton() {
+        return driver.findElement(By.xpath("/html/body/div/nav/a[2]"));
+    }
+
+    private WebElement locateUnsuccessfullySentMessageAlert() {
+        return driver.findElement(By.xpath("/html/body/div/main/div/div/div[3]/div/div/form/div[1]"));
+    }
+
+    private WebElement locateNameFieldIsRequiredMessageAlert() {
+        return driver.findElement(By.xpath("/html/body/div/main/div/div/div[3]/div/div/form/label[1]/span[2]"));
+    }
+
+    private WebElement locateEmailFieldIsRequiredMessageAlert() {
+        return driver.findElement(By.xpath("/html/body/div/main/div/div/div[3]/div/div/form/label[2]/span[2]"));
+    }
+
+    private WebElement locateMessageFieldIsRequiredMessageAlert() {
+        return driver.findElement(By.xpath("/html/body/div/main/div/div/div[3]/div/div/form/label[3]/span[2]"));
+    }
 
     /**
      * Finds the blog link on the page, and asserts if the blog button is displayed.
      *
      * @return WebElement
      */
-    public WebElement findBlog() {
-        WebElement blogButton = driver.findElement(By.xpath("/html/body/div/nav/a[2]"));
-        Assert.assertTrue(blogButton.isDisplayed());
+    public HomePage findBlog() {
+        locateBlogButton();
+        Assert.assertTrue(locateBlogButton().isDisplayed());
 
-        return blogButton;
+        return this;
     }
 
     /**
@@ -45,10 +83,8 @@ public class HomePage {
      *
      * @return BlogPage
      */
-    public BlogPage clickBlog() {
-        findBlog().click();
-
-        return new BlogPage();
+    public void clickBlog() {
+        locateBlogButton().click();
     }
 
     /**
@@ -57,35 +93,38 @@ public class HomePage {
      * @return void
      */
     public void validateScreen() {
-        WebElement aboutMe = driver.findElement(By.xpath("/html/body/div/main/div/div/div[2]/div[1]"));
-        Assert.assertTrue(aboutMe.isDisplayed());
-
-        WebElement techStack = driver.findElement(By.xpath("/html/body/div/main/div/div/div[2]/div[2]"));
-        Assert.assertTrue(techStack.isDisplayed());
-
-        contactForm = driver.findElement(By.xpath("/html/body/div/main/div/div/div[3]/div/div/form"));
-        Assert.assertTrue(contactForm.isDisplayed());
+        locateAboutMe();
+        locateTechStack();
+        locateContactForm();
+        locateBlogButton();
+        String blogButtonText = locateBlogButton().getText();
 
         WebElement davorMinchorov = driver.findElement(By.xpath("/html/body/div/nav/a[1]"));
         String davorMinchorovText = davorMinchorov.getText();
+
+        WebElement picture = driver.findElement(By.xpath("/html/body/div/main/div/div/div[1]/div/img"));
+        WebElement linkedInLogo = driver.findElement(By.linkText("Linkedin icon"));
+        WebElement gitHubLogo = driver.findElement(By.linkText("Github icon"));
+        WebElement twitterLogo = driver.findElement(By.linkText("Twitter icon"));
+
+        Assert.assertTrue(locateAboutMe().isDisplayed());
+
+        Assert.assertTrue(locateTechStack().isDisplayed());
+
+        Assert.assertTrue(locateContactForm().isDisplayed());
+
         Assert.assertTrue(davorMinchorov.isDisplayed());
         Assert.assertEquals(davorMinchorovText, "DAVOR MINCHOROV");
 
-        WebElement blogButton = driver.findElement(By.xpath("/html/body/div/nav/a[2]"));
-        String blogButtonText = blogButton.getText();
-        Assert.assertTrue(blogButton.isDisplayed());
+        Assert.assertTrue(locateBlogButton().isDisplayed());
         Assert.assertEquals(blogButtonText, "BLOG");
 
-        WebElement picture = driver.findElement(By.xpath("/html/body/div/main/div/div/div[1]/div/img"));
         Assert.assertTrue(picture.isDisplayed());
 
-        WebElement linkedInLogo = driver.findElement(By.linkText("Linkedin icon"));
         Assert.assertTrue(linkedInLogo.isDisplayed());
 
-        WebElement gitHubLogo = driver.findElement(By.linkText("Github icon"));
         Assert.assertTrue(gitHubLogo.isDisplayed());
 
-        WebElement twitterLogo = driver.findElement(By.linkText("Twitter icon"));
         Assert.assertTrue(twitterLogo.isDisplayed());
     }
 
@@ -95,12 +134,13 @@ public class HomePage {
      * @return void
      */
     public void checkAboutMe() {
-        String aboutMeText = driver.findElement(By.xpath("/html/body/div/main/div/div/div[2]/div[1]")).getText();
+        locateAboutMe();
+        String aboutMeText = locateAboutMe().getText();
         Assert.assertEquals(aboutMeText, "About Me\n" +
                 "I am a 30 year old web developer from Skopje, Macedonia, who studied software engineering at University" +
                 " American College Skopje and have about 5 years of experience building custom web based solutions.\n" +
                 "\n" +
-                "Currently, I am working as a Senior PHP Developer for clients via Quantox Technology for about 15 months.\n" +
+                "Currently, I am working as a Senior PHP Developer for clients via Quantox Technology for about 16 months.\n" +
                 "\n" +
                 "I am also a Senior Freelance PHP Consultant via Adeva, an exclusive remote developers' network for about 3 years.\n" +
                 "\n" +
@@ -118,7 +158,8 @@ public class HomePage {
      * @return void
      */
     public void checkTechnologyStackText() {
-        String technologyStackText = driver.findElement(By.xpath("/html/body/div/main/div/div/div[2]/div[2]/article")).getText();
+        locateTechStack();
+        String technologyStackText = locateTechStack().getText();
         Assert.assertEquals(technologyStackText, "Technology Stack\n" +
                 "The technology stack that I use depends on the project but I usually use and have experience" +
                 " with the following languages, technologies, libraries and tools:\n" +
@@ -131,57 +172,66 @@ public class HomePage {
     /**
      * Finds and asserts contact form.
      *
-     * @return void
+     * @return HomePage
      */
-    public void findContactForm() {
-        contactForm = driver.findElement(By.tagName("form"));
+    public HomePage findContactForm() {
+        locateContactForm();
+        Assert.assertTrue(locateContactForm().isDisplayed());
+        Assert.assertTrue(locateContactForm().isEnabled());
 
-        Assert.assertTrue(contactForm.isDisplayed());
-        Assert.assertTrue(contactForm.isEnabled());
+        return this;
     }
 
     /**
      * Sets valid full name and waits 5 seconds to avoid reCAPTCHA errors.
      *
-     * @return void
+     * @return HomePage
      * @throws InterruptedException
      */
-    public void setValidFullName() throws InterruptedException {
+    public HomePage setValidFullName() throws InterruptedException {
         driver.findElement(By.xpath("/html/body/div/main/div/div/div[3]/div/div/form/label[1]/input")).sendKeys("Miki Test");
         Thread.sleep(5000);
+
+        return this;
     }
 
     /**
      * Sets valid mail name and waits 5 seconds to avoid reCAPTCHA errors.
      *
-     * @return void
+     * @return HomePage
      * @throws InterruptedException
      */
-    public void setValidMail() throws InterruptedException {
+    public HomePage setValidMail() throws InterruptedException {
         driver.findElement(By.name("email")).sendKeys("mikitesting@gmail.com");
         Thread.sleep(5000);
+
+        return this;
     }
 
     /**
      * Sets valid message name and waits 5 seconds to avoid reCAPTCHA errors.
      *
-     * @return void
+     * @return HomePage
      * @throws InterruptedException
      */
-    public void setValidMessage() throws InterruptedException {
+    public HomePage setValidMessage() throws InterruptedException {
         driver.findElement(By.name("message")).sendKeys("Hello Davor, it`s Miki testing");
         Thread.sleep(5000);
+
+        return this;
     }
 
     /**
      * Clicks send button of the contact form
      *
-     * @return void
+     * @return HomePage
      * @throws InterruptedException
      */
-    public void clickSendButton() throws InterruptedException {
+    public HomePage clickSendButton() throws InterruptedException {
         driver.findElement(By.xpath("/html/body/div/main/div/div/div[3]/div/div/form/button")).click();
         Thread.sleep(2000);
+
+        return this;
     }
 
     /**
@@ -189,7 +239,7 @@ public class HomePage {
      *
      * @return void
      */
-    public void checkSuccessfulSentMessageReport() {
+    public void checkSuccessfulSentMessageAlert() {
         WebElement successfullySentMessage = driver.findElement(By.xpath("/html/body/div/main/div/div/div[3]/div/div/form/div[1]"));
         Assert.assertTrue(successfullySentMessage.isDisplayed());
 
@@ -202,29 +252,29 @@ public class HomePage {
      *
      * @return void
      */
-    public void checkUnsuccessfulSentMessageReport() {
-        if (driver.findElement(By.xpath("/html/body/div/main/div/div/div[3]/div/div/form/div[1]")).isDisplayed()) {
+    public void checkUnsuccessfulSentMessageAlert() {
+        if (locateUnsuccessfullySentMessageAlert().isDisplayed()) {
 
-            String unsuccessfullySentMessage = driver.findElement(By.xpath("/html/body/div/main/div/div/div[3]/div/div/form/div[1]")).getText();
+            String unsuccessfullySentMessage = locateUnsuccessfullySentMessageAlert().getText();
             Assert.assertEquals(unsuccessfullySentMessage, "Oh oh, there were errors.");
             System.out.println("Error text shown.");
 
             if (driver.findElements(By.xpath("/html/body/div/main/div/div/div[3]/div/div/form/label[1]/span[2]")).size() > 0) {
 
-                String nameFieldIsRequiredMessage = driver.findElement(By.xpath("/html/body/div/main/div/div/div[3]/div/div/form/label[1]/span[2]")).getText();
+                String nameFieldIsRequiredMessage = locateNameFieldIsRequiredMessageAlert().getText();
 
                 Assert.assertEquals(nameFieldIsRequiredMessage, "The name field is required.");
                 System.out.println("Name field error text shown and passed.");
             } else if (driver.findElements(By.xpath("/html/body/div/main/div/div/div[3]/div/div/form/label[2]/span[2]")).size() > 0) {
 
-                String emailFieldIsRequiredMessage = driver.findElement(By.xpath("/html/body/div/main/div/div/div[3]/div/div/form/label[2]/span[2]")).getText();
+                String emailFieldIsRequiredMessage = locateEmailFieldIsRequiredMessageAlert().getText();
 
                 Assert.assertEquals(emailFieldIsRequiredMessage, "The email field is required.");
                 System.out.println("Email field error text shown and passed.");
 
             } else if (driver.findElements(By.xpath("/html/body/div/main/div/div/div[3]/div/div/form/label[3]/span[2]")).size() > 0) {
 
-                String messageFieldIsRequiredMessage = driver.findElement(By.xpath("/html/body/div/main/div/div/div[3]/div/div/form/label[3]/span[2]")).getText();
+                String messageFieldIsRequiredMessage = locateMessageFieldIsRequiredMessageAlert().getText();
 
                 Assert.assertEquals(messageFieldIsRequiredMessage, "The message field is required.");
                 System.out.println("Message field error text shown and passed.");
@@ -240,38 +290,38 @@ public class HomePage {
      *
      * @return void
      */
-    public void checkEmptyFormSendMessagesReport() {
-        WebElement unsuccessfullySentMessageReport = driver.findElement(By.xpath("/html/body/div/main/div/div/div[3]/div/div/form/div[1]"));
-        String unsuccessfullySentMessageText = driver.findElement(By.xpath("/html/body/div/main/div/div/div[3]/div/div/form/div[1]")).getText();
+    public void checkEmptyFormSendMessagesAlert() {
+        locateUnsuccessfullySentMessageAlert();
+        String unsuccessfullySentMessageText = locateUnsuccessfullySentMessageAlert().getText();
 
-        WebElement nameFieldIsRequiredMessageReport = driver.findElement(By.xpath("/html/body/div/main/div/div/div[3]/div/div/form/label[1]/span[2]"));
-        String nameFieldIsRequiredMessage = driver.findElement(By.xpath("/html/body/div/main/div/div/div[3]/div/div/form/label[1]/span[2]")).getText();
+        locateNameFieldIsRequiredMessageAlert();
+        String nameFieldIsRequiredMessage = locateNameFieldIsRequiredMessageAlert().getText();
 
-        WebElement emailFieldIsRequiredMessageReport = driver.findElement(By.xpath("/html/body/div/main/div/div/div[3]/div/div/form/label[2]/span[2]"));
-        String emailFieldIsRequiredMessage = driver.findElement(By.xpath("/html/body/div/main/div/div/div[3]/div/div/form/label[2]/span[2]")).getText();
+        locateEmailFieldIsRequiredMessageAlert();
+        String emailFieldIsRequiredMessage = locateEmailFieldIsRequiredMessageAlert().getText();
 
-        WebElement messageFieldIsRequiredMessageReport = driver.findElement(By.xpath("/html/body/div/main/div/div/div[3]/div/div/form/label[3]/span[2]"));
-        String messageFieldIsRequiredMessage = driver.findElement(By.xpath("/html/body/div/main/div/div/div[3]/div/div/form/label[3]/span[2]")).getText();
+        locateMessageFieldIsRequiredMessageAlert();
+        String messageFieldIsRequiredMessage = locateMessageFieldIsRequiredMessageAlert().getText();
 
         //Assertions for every message that is displayed and that is correct text.
-        Assert.assertTrue(unsuccessfullySentMessageReport.isDisplayed());
+        Assert.assertTrue(locateUnsuccessfullySentMessageAlert().isDisplayed());
         Assert.assertEquals(unsuccessfullySentMessageText, "Oh oh, there were errors.");
 
-        Assert.assertTrue(nameFieldIsRequiredMessageReport.isDisplayed());
+        Assert.assertTrue(locateNameFieldIsRequiredMessageAlert().isDisplayed());
         Assert.assertEquals(nameFieldIsRequiredMessage, "The name field is required.");
 
-        Assert.assertTrue(emailFieldIsRequiredMessageReport.isDisplayed());
+        Assert.assertTrue(locateEmailFieldIsRequiredMessageAlert().isDisplayed());
         Assert.assertEquals(emailFieldIsRequiredMessage, "The email field is required.");
 
-        Assert.assertTrue(messageFieldIsRequiredMessageReport.isDisplayed());
+        Assert.assertTrue(locateMessageFieldIsRequiredMessageAlert().isDisplayed());
         Assert.assertEquals(messageFieldIsRequiredMessage, "The message field is required.");
     }
 
     /**
      * Finds and asserts if the hyperlinks are enabled and displayed.
      *
-     * @param WebElement find
-     * @return WebElement
+     * @param String linkText
+     * @return WebElement find
      */
     public WebElement findHyperlink(WebElement find) {
         this.find = find;
@@ -286,13 +336,15 @@ public class HomePage {
      * Gets the color as Hex and asserts if it`s the expected color.
      *
      * @param String expectedColourAsHex
-     * @return void
+     * @return HomePage
      */
-    public void getHyperlinkColor(String expectedColourAsHex) {
+    public HomePage getHyperlinkColor(String expectedColourAsHex) {
         String getElementColour = findHyperlink(find).getCssValue("color");
 
         String HexColor = Color.fromString(getElementColour).asHex();
         Assert.assertEquals(HexColor, expectedColourAsHex);
+
+        return this;
     }
 
     /**

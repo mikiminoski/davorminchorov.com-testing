@@ -2,19 +2,26 @@ package Tests.Homepage;
 
 import Tests.BaseSet;
 import org.testng.annotations.Test;
+import pages.BlogPage;
 import pages.HomePage;
 
-public class TestingHomePageTextsAndBlogNavigation extends BaseSet {
+import static pages.BlogPage.getBlogPage;
+import static pages.HomePage.getHomePage;
 
-    HomePage homepage = new HomePage();
+public class HomePageTextsAndBlogNavigationTests extends BaseSet {
+
+    HomePage homepage = getHomePage();
+    BlogPage blogpage = getBlogPage();
 
     /**
      * Test ID: n3
      */
     @Test
     public void click_on_blog_and_validate_url() {
-        homepage.findBlog();
-        homepage.clickBlog().validateBlogUrl();
+        homepage.findBlog()
+                .clickBlog();
+
+        blogpage.validateBlogUrl();
     }
 
     /**

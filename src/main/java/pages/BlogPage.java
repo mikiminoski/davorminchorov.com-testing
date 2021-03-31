@@ -5,9 +5,16 @@ import org.testng.Assert;
 
 import static factory.DriverFactory.getChromeDriver;
 
-public class BlogPage extends HomePage {
+public class BlogPage {
 
-    private WebDriver driver = getChromeDriver();
+    WebDriver driver = getChromeDriver();
+
+    private BlogPage(){
+    }
+
+    public static BlogPage getBlogPage(){
+        return new BlogPage();
+    }
 
     /**
      * Validates the blog URL
