@@ -1,12 +1,13 @@
 package Tests;
 
-import Tests.BaseSet;
 import org.testng.annotations.Test;
 import pages.HomePage;
 
-public class TestingBrokenLinks extends BaseSet {
+import static pages.HomePage.getHomePage;
 
-    HomePage homepage = new HomePage();
+public class BrokenLinksTests extends BaseSet {
+
+    HomePage homepage = getHomePage();
 
     @Test
     public void testBrokenLinks() {

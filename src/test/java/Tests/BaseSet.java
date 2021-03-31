@@ -12,8 +12,8 @@ import static factory.DriverFactory.getChromeDriver;
 
 public class BaseSet {
 
-    protected WebDriver driver;
-    protected String url;
+    WebDriver driver;
+    String url = "http://davorminchorov.com/?ref=MikiAutomation";
 
     /**
      * Setting before suite and getting the ChromeDriver
@@ -23,8 +23,6 @@ public class BaseSet {
     @BeforeSuite
     public void setUp() {
         driver = getChromeDriver();
-
-        url = "https://davorminchorov.com/?ref=MikiAutomation";
 
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
@@ -38,8 +36,6 @@ public class BaseSet {
     @BeforeClass
     public void setUp2() {
         driver = getChromeDriver();
-
-        url = "http://davorminchorov.com/?ref=MikiAutomation";
 
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));

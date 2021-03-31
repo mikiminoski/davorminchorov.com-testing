@@ -3,10 +3,10 @@
     <test name="TestingHomePage">
         <classes>
             <class name="Tests.BaseSet"/>
-            <class name="Tests.Homepage.TestingContactForm"/>
-            <class name="Tests.Homepage.TestingHomePageHyperlinks"/>
-            <class name="Tests.Homepage.TestingHomePageTextsAndBlogNavigation"/>
-            <class name="Tests.TestingBrokenLinks"/>
+            <class name="Tests.Homepage.ContactFormTests"/>
+            <class name="Tests.Homepage.HomePageHyperlinksTests"/>
+            <class name="Tests.Homepage.HomePageTextsAndBlogNavigationTests"/>
+            <class name="Tests.BrokenLinksTests"/>
         </classes>
     </test>
 </suite>
